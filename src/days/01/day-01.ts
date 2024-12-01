@@ -1,49 +1,57 @@
-import { AbstractDay } from '../../base/abstract-day';
 import { inputStringToArray } from '../../utils/input-handler.util';
+import { AbstractDay } from '../base/abstract-day';
 
 export class Day01 extends AbstractDay {
-  private inputArray: string[];
+  private readonly leftList: number[] = [];
+  private readonly rightList: number[] = [];
   constructor(readonly input: string) {
     super(input);
-    this.inputArray = inputStringToArray(this.input);
+
+    inputStringToArray(this.input).forEach((line) => {
+      const [first, second] = line.split('  ').map((item) => {
+        return parseInt(item);
+      });
+      this.leftList.push(first);
+      this.rightList.push(second);
+    });
+
+    if (this.leftList.length !== this.rightList.length) {
+      throw new Error('Lists are not the same length');
+    }
   }
 
   partOne(): number {
-    // Парсим
-    let { leftList, rightList } = this.parseLocationIdsLists();
-
-    if (leftList.length !== rightList.length) {
-      throw new Error('Lists are not the same length');
-    }
-
     // Сортируем
-    leftList = leftList.sort((a, b) => a - b);
-    rightList = rightList.sort((a, b) => a - b);
+    const sortedLeftList = [...this.leftList].sort((a, b) => a - b);
+    const sortedRightList = [...this.rightList].sort((a, b) => a - b);
 
     let sum = 0;
-    for (let i = 0; i < leftList.length; i++) {
-      sum = sum + Math.abs(leftList[i] - rightList[i]);
+    for (let i = 0; i < sortedLeftList.length; i++) {
+      sum = sum + Math.abs(sortedLeftList[i] - sortedRightList[i]);
     }
 
     return sum;
   }
 
   partTwo(): number {
-    return this.input.length;
-  }
+    const rightListCountMap = new Map<number, number>();
 
-  private parseLocationIdsLists(): { leftList: number[]; rightList: number[] } {
-    const leftList: number[] = [];
-    const rightList: number[] = [];
-
-    this.inputArray.forEach((line) => {
-      const [first, second] = line.split('  ').map((item) => {
-        return parseInt(item);
-      });
-      leftList.push(first);
-      rightList.push(second);
+    this.rightList.forEach((item) => {
+      if (rightListCountMap.has(item)) {
+        rightListCountMap.set(item, rightListCountMap.get(item)! + 1);
+      } else {
+        rightListCountMap.set(item, 1);
+      }
     });
 
-    return { leftList, rightList };
+    let sum = 0;
+
+    for (const id of this.leftList) {
+      if (rightListCountMap.has(id)) {
+        sum = sum + id * rightListCountMap.get(id)!;
+      }
+    }
+
+    return sum;
   }
 }
