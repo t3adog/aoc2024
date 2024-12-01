@@ -6,8 +6,12 @@ Solutions for [Advent of Code 2024](https://adventofcode.com/2024) in TypeScript
 
 # quick start
 
-Run:
+## Prepare:
 
 - `pnpm install`
 - `pnpm test`
-- `pnpm start`
+
+## Run:
+
+- `pnpm start` for all days
+- `pnpm start day${number}`: `pnpm start day01`, `pnpm start day02`, etc for certain day

@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Day02 } from './day02';
+import { Day02 } from './day-02';
 
 describe('day 02', () => {
   const day02 = new Day02(

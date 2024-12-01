@@ -1,21 +1,44 @@
 import fs from 'fs';
 import { Day01 } from './days/01/day-01';
-import { Day02 } from './days/02/day02';
+import { Day02 } from './days/02/day-02';
+import { AbstractDay } from './days/base/abstract-day';
 
-console.log('Hello AOC 2024!');
+const start = new Date().getTime();
+console.log('Hello AoC 2024!');
 
-// Day 01
-const day01 = new Day01(
-  fs.readFileSync('./src/days/01/inputs/prod.txt', 'utf8'),
+const days: Map<string, AbstractDay> = new Map();
+days.set(
+  'day01',
+  new Day01(fs.readFileSync('./src/days/01/inputs/prod.txt', 'utf8')),
+);
+days.set(
+  'day02',
+  new Day02(fs.readFileSync('./src/days/02/inputs/prod.txt', 'utf8')),
 );
 
-console.log(`Day 01, Part 01: ${day01.partOne()}`);
-console.log(`Day 01, Part 02: ${day01.partTwo()}`);
+const dayParam = process.argv[2];
 
-// Day 02
-const day02 = new Day02(
-  fs.readFileSync('./src/days/02/inputs/prod.txt', 'utf8'),
-);
+if (dayParam) {
+  if (days.has(dayParam)) {
+    runDay(dayParam);
+  } else {
+    throw new Error(`Day ${dayParam} implementation does not exist`);
+  }
+} else {
+  for (const day of days.keys()) {
+    runDay(day);
+  }
+}
 
-console.log(`Day 02, Part 01: ${day02.partOne()}`);
-console.log(`Day 02, Part 02: ${day02.partTwo()}`);
+console.log(`Total time: ${new Date().getTime() - start} ms`);
+
+function runDay(day: string) {
+  let start = new Date().getTime();
+  console.log(
+    `${day}, part 01: ${days.get(day)!.partOne()}. Time: ${new Date().getTime() - start} ms`,
+  );
+  start = new Date().getTime();
+  console.log(
+    `${day}, part 02: ${days.get(day)!.partTwo()}. Time: ${new Date().getTime() - start} ms`,
+  );
+}
