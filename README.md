@@ -6,6 +6,6 @@ Solutions for [Advent of Code 2024 in TypeScript](https://adventofcode.com/2024)
 
 # Quick start
 
-`pnpm install`
-`pnpm test`
-`pnpm start`
+- `pnpm install`
+- `pnpm test`
+- `pnpm start`
