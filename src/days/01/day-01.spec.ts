@@ -7,10 +7,10 @@ describe('day 01', () => {
   );
 
   it('should solve part01', () => {
-    expect(day01.partOne()).toEqual(4);
+    expect(day01.partOne()).toEqual(11);
   });
 
   it('should solve part02', () => {
-    expect(day01.partTwo()).toEqual(4);
+    expect(day01.partTwo()).toEqual(31);
   });
 });
