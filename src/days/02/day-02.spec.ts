@@ -11,22 +11,24 @@ describe('day 02', () => {
   });
 
   it('should solve part02', () => {
-    expect(day02.partTwo()).toEqual(1);
+    expect(day02.partTwo()).toEqual(4);
   });
 });
 
 describe('isSafe', () => {
   it('should return true', () => {
-    expect(day02.isSafe('1 2 3 4 5')).toEqual(true);
-    expect(day02.isSafe('7 6 4 2 1')).toEqual(true);
-    expect(day02.isSafe('1 3 6 7 9')).toEqual(true);
+    expect(day02.isSafe([1, 2, 3, 4, 5])).toEqual(true);
+    expect(day02.isSafe([7, 6, 4, 2, 1])).toEqual(true);
+    expect(day02.isSafe([1, 3, 6, 7, 9])).toEqual(true);
+    expect(day02.isSafe([1, 3, 2, 4, 5].splice(1, 1))).toEqual(true);
+    expect(day02.isSafe([8, 6, 4, 4, 1].splice(2, 1))).toEqual(true);
   });
 
   it('should return false', () => {
-    expect(day02.isSafe('1 2 7 8 9')).toEqual(false);
-    expect(day02.isSafe('9 7 6 2 1')).toEqual(false);
-    expect(day02.isSafe('1 3 2 4 5')).toEqual(false);
-    expect(day02.isSafe('8 6 4 4 1')).toEqual(false);
+    expect(day02.isSafe([1, 2, 7, 8, 9])).toEqual(false);
+    expect(day02.isSafe([9, 7, 6, 2, 1])).toEqual(false);
+    expect(day02.isSafe([1, 3, 2, 4, 5])).toEqual(false);
+    expect(day02.isSafe([8, 6, 4, 4, 1])).toEqual(false);
   });
 });
 
