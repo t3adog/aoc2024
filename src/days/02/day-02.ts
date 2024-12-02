@@ -2,19 +2,19 @@ import { inputStringToArray } from '../../utils/input-handler.util';
 import { AbstractDay } from '../base/abstract-day';
 
 export class Day02 extends AbstractDay {
-  private readonly reports: string[];
+  private readonly reports: number[][];
   constructor(readonly input: string) {
     super(input);
-    this.reports = inputStringToArray(this.input);
+    this.reports = inputStringToArray(this.input).map((line) => {
+      return line.split(' ').map((item) => {
+        return parseInt(item);
+      });
+    });
   }
 
   partOne(): number {
     let safeReportsCount = 0;
-    for (const reportStr of this.reports) {
-      const report = reportStr.split(' ').map((item) => {
-        return parseInt(item);
-      });
-
+    for (const report of this.reports) {
       if (this.isSafe(report)) {
         safeReportsCount++;
       }
@@ -24,17 +24,17 @@ export class Day02 extends AbstractDay {
 
   partTwo(): number {
     let safeReportsCount = 0;
-    for (const reportStr of this.reports) {
-      const report = reportStr.split(' ').map((item) => {
-        return parseInt(item);
-      });
-
+    for (const report of this.reports) {
       if (this.isSafe(report)) {
         safeReportsCount++;
       } else {
-        for (let i = 0; i < report.length; i++) {
-          const tempReport = this.recompileReport(report, i);
-          if (this.isSafe(tempReport)) {
+        for (
+          let indexWithout = 0;
+          indexWithout < report.length;
+          indexWithout++
+        ) {
+          const tmpReport = report.filter((_, index) => index !== indexWithout);
+          if (this.isSafe(tmpReport)) {
             safeReportsCount++;
             break;
           }
@@ -42,16 +42,6 @@ export class Day02 extends AbstractDay {
       }
     }
     return safeReportsCount;
-  }
-
-  recompileReport(report: number[], indexWithout: number): number[] {
-    const tempReport: number[] = [];
-    for (let z = 0; z < report.length; z++) {
-      if (z !== indexWithout) {
-        tempReport.push(report[z]);
-      }
-    }
-    return tempReport;
   }
 
   isSafe(report: number[]): boolean {
