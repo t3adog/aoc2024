@@ -2,6 +2,7 @@ import fs from 'fs';
 import { Day01 } from './days/01/day-01';
 import { Day02 } from './days/02/day-02';
 import { Day03 } from './days/03/day03';
+import { Day04 } from './days/04/day-04';
 import { AbstractDay } from './days/base/abstract-day';
 
 const start = new Date().getTime();
@@ -19,6 +20,10 @@ days.set(
 days.set(
   'day03',
   new Day03(fs.readFileSync('./src/days/03/inputs/prod.txt', 'utf8')),
+);
+days.set(
+  'day04',
+  new Day04(fs.readFileSync('./src/days/04/inputs/prod.txt', 'utf8')),
 );
 
 const dayParam = process.argv[2];
