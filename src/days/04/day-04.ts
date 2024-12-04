@@ -23,6 +23,23 @@ export class Day04 extends AbstractDay {
     return xmasCount;
   }
 
+  partTwo(): number {
+    let puzzleCount = 0;
+    for (let y = 0; y < this.chars.length; y++) {
+      for (let x = 0; x < this.chars[y].length; x++) {
+        if (
+          (this.chars[y][x] == 'M' || this.chars[y][x] == 'S') &&
+          (this.chars[y][x + 2] == 'M' || this.chars[y][x + 2] == 'S')
+        ) {
+          if (this.isPuzzleComplete(y, x, this.chars)) {
+            puzzleCount++;
+          }
+        }
+      }
+    }
+    return puzzleCount;
+  }
+
   countXmas(y: number, x: number, chars: string[][]): number {
     let xmasCount = 0;
 
@@ -58,6 +75,25 @@ export class Day04 extends AbstractDay {
       xmasCount++;
     }
     return xmasCount;
+  }
+
+  isPuzzleComplete(y: number, x: number, chars: string[][]): boolean {
+    type mas = 'MAS' | 'SAM';
+    try {
+      if (
+        chars[y][x] + chars[y + 1][x + 1] + chars[y + 2][x + 2] === 'MAS' ||
+        chars[y][x] + chars[y + 1][x + 1] + chars[y + 2][x + 2] === 'SAM'
+      ) {
+        if (
+          chars[y][x + 2] + chars[y + 1][x + 1] + chars[y + 2][x] === 'MAS' ||
+          chars[y][x + 2] + chars[y + 1][x + 1] + chars[y + 2][x] === 'SAM'
+        )
+          return true;
+      }
+    } catch (error) {
+      return false;
+    }
+    return false;
   }
 
   isXmasFromLeftToRight(y: number, x: number, chars: string[][]): boolean {
@@ -174,9 +210,5 @@ export class Day04 extends AbstractDay {
     } catch (error) {
       return false;
     }
-  }
-
-  partTwo(): number {
-    return 1;
   }
 }
