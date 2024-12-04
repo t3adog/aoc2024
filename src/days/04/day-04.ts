@@ -2,7 +2,7 @@ import { inputStringToArray } from '../../utils/input-handler.util';
 import { AbstractDay } from '../base/abstract-day';
 
 export class Day04 extends AbstractDay {
-  private chars: string[][];
+  private readonly chars: string[][];
   constructor(readonly input: string) {
     super(input);
     this.chars = inputStringToArray(this.input).map((line) => {
@@ -78,7 +78,6 @@ export class Day04 extends AbstractDay {
   }
 
   isPuzzleComplete(y: number, x: number, chars: string[][]): boolean {
-    type mas = 'MAS' | 'SAM';
     try {
       if (
         chars[y][x] + chars[y + 1][x + 1] + chars[y + 2][x + 2] === 'MAS' ||
