@@ -48,7 +48,30 @@ export class Day05 extends AbstractDay {
   }
 
   partTwo(): number {
-    return 1;
+    let result = 0;
+    for (const update of this.updates) {
+      if (!this.isCorrectUpdate(update)) {
+        const rightUpdate = this.sortUpdate(update);
+        const middle = rightUpdate[(update.length - 1) / 2];
+        result += middle;
+      }
+    }
+    return result;
+  }
+
+  sortUpdate(update: number[]): number[] {
+    return update.sort((a, b) => {
+      if (this.rulesAfter.has(a)) {
+        if (this.rulesAfter.get(a)?.includes(b)) {
+          return b;
+        }
+      } else if (this.rulesAfter.has(b)) {
+        if (this.rulesAfter.get(b)?.includes(a)) {
+          return a;
+        }
+      }
+      return -1;
+    });
   }
 
   isCorrectUpdate(update: number[]): boolean {
