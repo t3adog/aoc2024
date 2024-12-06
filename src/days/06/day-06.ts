@@ -13,12 +13,12 @@ export class Day06 extends AbstractDay {
   }
 
   partOne(): number {
-    let stepCount = 1;
+    const guardPath = new Map<string, number>();
     let currentPoint = this.findStartPoint(this.map);
+    guardPath.set(currentPoint.getKey(), 0);
     let direction = this.determineDirection(
       this.map[currentPoint.y][currentPoint.x],
     );
-    this.printMap(this.map);
     while (true) {
       const nextPoint = this.findNextPoint(this.map, currentPoint, direction);
       if (this.isEndOfMap(nextPoint.y, nextPoint.x, this.map)) {
@@ -27,15 +27,19 @@ export class Day06 extends AbstractDay {
       if (this.isObstruction(this.map[nextPoint.y][nextPoint.x])) {
         direction = this.changeDirection(direction);
       } else {
-        //this.map[currentPoint.y][currentPoint.x] = 'X';
-        //this.printMap(this.map);
         currentPoint = nextPoint;
-        stepCount++;
+        if (guardPath.has(currentPoint.getKey())) {
+          guardPath.set(
+            currentPoint.getKey(),
+            guardPath.get(currentPoint.getKey())! + 1,
+          );
+        } else {
+          guardPath.set(currentPoint.getKey(), 1);
+        }
       }
     }
 
-    // 6088 to high
-    return stepCount;
+    return guardPath.size;
   }
 
   partTwo(): number {
