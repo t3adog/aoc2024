@@ -19,5 +19,5 @@
     ],
     "testEnvironment": "node",
     "cacheDirectory": "../.jest-cache",
-    "testTimeout": 120000
+    "testTimeout": 10000
 }

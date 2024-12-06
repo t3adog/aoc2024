@@ -4,7 +4,7 @@ import { Direction } from './direction.enum';
 import { Position } from './position';
 
 export class Day06 extends AbstractDay {
-  private map: string[][];
+  map: string[][];
   constructor(readonly input: string) {
     super(input);
     this.map = inputStringToArray(this.input).map((line) => {
@@ -13,18 +13,101 @@ export class Day06 extends AbstractDay {
   }
 
   partOne(): number {
-    const guardPath = new Map<string, number>();
-    let currentPoint = this.findStartPoint(this.map);
-    guardPath.set(currentPoint.getKey(), 0);
-    let direction = this.determineDirection(
+    const currentPoint = this.findStartPoint(this.map);
+    const startDirection = this.determineDirection(
       this.map[currentPoint.y][currentPoint.x],
     );
+
+    return this.buildGuardPath(currentPoint, startDirection, this.map).size;
+  }
+
+  partTwo(): number {
+    console.log('start');
+    const currentPoint = this.findStartPoint(this.map);
+    const startDirection = this.determineDirection(
+      this.map[currentPoint.y][currentPoint.x],
+    );
+
+    const guardPath = this.buildGuardPath(
+      currentPoint,
+      startDirection,
+      this.map,
+    );
+    console.log('Guard path', guardPath.size);
+
+    const pathPositions: Position[] = [];
+    for (const key of guardPath.keys()) {
+      if (guardPath.get(key)! > 0) {
+        pathPositions.push(Position.from(key));
+      }
+    }
+
+    console.log('Positions', pathPositions.length);
+
+    let count = 0;
+    // for (const position of pathPositions) {
+    //   const copyMap = Array.from(this.map);
+
+    //   copyMap[position.y][position.x] = '#';
+    //   //this.printMap(copyMap);
+    //   if (this.isLoop(currentPoint, startDirection, copyMap)) {
+    //     count++;
+    //   }
+    // }
+
+    // 5516 too high
+    return count;
+  }
+
+  isLoop(
+    startPosition: Position,
+    startDirection: Direction,
+    map: string[][],
+  ): boolean {
+    let currentPoint = startPosition;
+    let direction = startDirection;
+    const guardPath = new Map<string, number>();
+    guardPath.set(currentPoint.getKey(), 0);
     while (true) {
       const nextPoint = this.findNextPoint(this.map, currentPoint, direction);
-      if (this.isEndOfMap(nextPoint.y, nextPoint.x, this.map)) {
+      if (this.isEndOfMap(nextPoint.y, nextPoint.x, map)) {
         break;
       }
-      if (this.isObstruction(this.map[nextPoint.y][nextPoint.x])) {
+      if (this.isObstruction(map[nextPoint.y][nextPoint.x])) {
+        direction = this.changeDirection(direction);
+      } else {
+        currentPoint = nextPoint;
+        if (guardPath.has(currentPoint.getKey())) {
+          guardPath.set(
+            currentPoint.getKey(),
+            guardPath.get(currentPoint.getKey())! + 1,
+          );
+        } else {
+          guardPath.set(currentPoint.getKey(), 1);
+        }
+        if (guardPath.get(currentPoint.getKey())! > 5) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  buildGuardPath(
+    startPosition: Position,
+    startDirection: Direction,
+    map: string[][],
+  ): Map<string, number> {
+    let currentPoint = startPosition;
+    let direction = startDirection;
+    const guardPath = new Map<string, number>();
+    guardPath.set(currentPoint.getKey(), 0);
+    while (true) {
+      const nextPoint = this.findNextPoint(this.map, currentPoint, direction);
+      if (this.isEndOfMap(nextPoint.y, nextPoint.x, map)) {
+        break;
+      }
+      if (this.isObstruction(map[nextPoint.y][nextPoint.x])) {
         direction = this.changeDirection(direction);
       } else {
         currentPoint = nextPoint;
@@ -38,12 +121,7 @@ export class Day06 extends AbstractDay {
         }
       }
     }
-
-    return guardPath.size;
-  }
-
-  partTwo(): number {
-    return 1;
+    return guardPath;
   }
 
   findStartPoint(map: string[][]): Position {
@@ -100,6 +178,10 @@ export class Day06 extends AbstractDay {
         return Direction.right;
     }
     throw new Error('Could not determine direction');
+  }
+
+  isLoopForObstruction(y: number, x: number): boolean {
+    return false;
   }
 
   isGuarder(symbol: string): boolean {
