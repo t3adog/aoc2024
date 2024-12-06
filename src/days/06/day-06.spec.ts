@@ -18,8 +18,7 @@ describe('day 06', () => {
 
 describe('isLoop', () => {
   it('should return true', () => {
-    // y = 6, x = 3;
-    const copyMap = Array.from(day06.map);
+    const copyMap = day06.copyMap(day06.map);
     copyMap[6][3] = '#';
     const start: Position = day06.findStartPoint(day06.map);
     const direction = day06.determineDirection(day06.map[start.y][start.x]);
@@ -27,10 +26,9 @@ describe('isLoop', () => {
   });
 
   it('should return false', () => {
-    // y = 6, x = 3;
-    const copyMap = Array.from(day06.map);
+    const copyMap = day06.copyMap(day06.map);
     const start: Position = day06.findStartPoint(day06.map);
     const direction = day06.determineDirection(day06.map[start.y][start.x]);
-    expect(day06.isLoop(start, direction, copyMap)).toEqual(true);
+    expect(day06.isLoop(start, direction, copyMap)).toEqual(false);
   });
 });

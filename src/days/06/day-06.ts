@@ -4,7 +4,7 @@ import { Direction } from './direction.enum';
 import { Position } from './position';
 
 export class Day06 extends AbstractDay {
-  map: string[][];
+  readonly map: string[][];
   constructor(readonly input: string) {
     super(input);
     this.map = inputStringToArray(this.input).map((line) => {
@@ -21,8 +21,8 @@ export class Day06 extends AbstractDay {
     return this.buildGuardPath(currentPoint, startDirection, this.map).size;
   }
 
+  // need optimization
   partTwo(): number {
-    console.log('start');
     const currentPoint = this.findStartPoint(this.map);
     const startDirection = this.determineDirection(
       this.map[currentPoint.y][currentPoint.x],
@@ -33,7 +33,6 @@ export class Day06 extends AbstractDay {
       startDirection,
       this.map,
     );
-    console.log('Guard path', guardPath.size);
 
     const pathPositions: Position[] = [];
     for (const key of guardPath.keys()) {
@@ -42,20 +41,17 @@ export class Day06 extends AbstractDay {
       }
     }
 
-    console.log('Positions', pathPositions.length);
-
     let count = 0;
-    // for (const position of pathPositions) {
-    //   const copyMap = Array.from(this.map);
+    for (const position of pathPositions) {
+      const copyMap = this.copyMap(this.map);
 
-    //   copyMap[position.y][position.x] = '#';
-    //   //this.printMap(copyMap);
-    //   if (this.isLoop(currentPoint, startDirection, copyMap)) {
-    //     count++;
-    //   }
-    // }
+      copyMap[position.y][position.x] = '#';
 
-    // 5516 too high
+      if (this.isLoop(currentPoint, startDirection, copyMap)) {
+        count++;
+      }
+    }
+
     return count;
   }
 
@@ -85,7 +81,7 @@ export class Day06 extends AbstractDay {
         } else {
           guardPath.set(currentPoint.getKey(), 1);
         }
-        if (guardPath.get(currentPoint.getKey())! > 5) {
+        if (guardPath.get(currentPoint.getKey())! > 3) {
           return true;
         }
       }
@@ -194,6 +190,10 @@ export class Day06 extends AbstractDay {
 
   isEndOfMap(y: number, x: number, map: string[][]): boolean {
     return y < 0 || y >= map.length || x < 0 || x >= map[y].length;
+  }
+
+  copyMap(map: string[][]): string[][] {
+    return map.map((row) => [...row]);
   }
 
   printMap(map: string[][]) {
