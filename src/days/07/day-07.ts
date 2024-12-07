@@ -22,20 +22,31 @@ export class Day07 extends AbstractDay {
 
   partOne(): number {
     return this.calibrationEquations
-      .filter((equation) => this.isValidEquation(equation))
+      .filter((equation) =>
+        this.isValidEquation(equation, [Operation.sum, Operation.mul]),
+      )
       .map((equation) => equation.value)
       .reduce((a, b) => a + b);
   }
 
   partTwo(): number {
-    return 1;
+    return this.calibrationEquations
+      .filter((equation) =>
+        this.isValidEquation(equation, [
+          Operation.sum,
+          Operation.mul,
+          Operation.js_sum,
+        ]),
+      )
+      .map((equation) => equation.value)
+      .reduce((a, b) => a + b);
   }
 
-  isValidEquation(equation: CalibrationEquation): boolean {
-    const permutations = permu(equation.operators.length - 1, [
-      Operation.sum,
-      Operation.mul,
-    ]);
+  isValidEquation(
+    equation: CalibrationEquation,
+    validOperations: Operation[],
+  ): boolean {
+    const permutations = permu(equation.operators.length - 1, validOperations);
     for (const permutation of permutations) {
       let result = equation.operators[0];
       for (let i = 1; i < equation.operators.length; i++) {
@@ -44,6 +55,10 @@ export class Day07 extends AbstractDay {
           result = result + equation.operators[i];
         } else if (operator === Operation.mul) {
           result = result * equation.operators[i];
+        } else if (operator === Operation.js_sum) {
+          result = Number.parseInt(
+            result.toString() + equation.operators[i].toString(),
+          );
         }
       }
       if (result == equation.value) {
