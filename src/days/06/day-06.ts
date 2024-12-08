@@ -195,8 +195,4 @@ export class Day06 extends AbstractDay {
   copyMap(map: string[][]): string[][] {
     return map.map((row) => [...row]);
   }
-
-  printMap(map: string[][]) {
-    console.log(map.map((line) => line.join('')).join('\n'));
-  }
 }
