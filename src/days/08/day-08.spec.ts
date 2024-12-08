@@ -7,7 +7,7 @@ describe('day 08', () => {
   );
 
   it('should solve part01', () => {
-    expect(day08.partOne()).toEqual(0);
+    expect(day08.partOne()).toEqual(14);
   });
 
   it('should solve part02', () => {
