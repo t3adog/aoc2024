@@ -6,7 +6,7 @@ const day09 = new Day09(
 );
 describe('day 09', () => {
   it('should solve part01', () => {
-    expect(day09.partOne()).toEqual(0);
+    expect(day09.partOne()).toEqual(1928);
   });
 
   it('should solve part02', () => {
@@ -16,18 +16,11 @@ describe('day 09', () => {
 
 describe('decryptDiskMap', () => {
   it('should be decrypted diskMap', () => {
-    expect(day09.decryptDiskMap('2333133121414131402')).toEqual(
-      '00...111...2...333.44.5555.6666.777.888899',
-    );
-  });
-});
-
-describe('diskMapDefragmentation', () => {
-  it('should be defragmented diskMap', () => {
     expect(
-      day09.defragmentationDiskMap(
-        '00...111...2...333.44.5555.6666.777.888899',
-      ),
-    ).toEqual('0099811188827773336446555566..............');
+      day09
+        .decryptDiskMap('2333133121414131402')
+        .map((item) => item.toString())
+        .join(''),
+    ).toEqual('00...111...2...333.44.5555.6666.777.888899');
   });
 });

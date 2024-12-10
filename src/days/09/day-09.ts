@@ -1,4 +1,5 @@
 import { AbstractDay } from '../base/abstract-day';
+import { DiskFile } from './file';
 
 export class Day09 extends AbstractDay {
   constructor(readonly input: string) {
@@ -7,60 +8,67 @@ export class Day09 extends AbstractDay {
 
   partOne(): number {
     const diskMap = this.decryptDiskMap(this.input);
-    console.log('Decrypted disk map: ', diskMap);
+    this.defragmentationDiskMap(diskMap);
 
-    const defragmentedDiskMap = this.defragmentationDiskMap(diskMap);
-    console.log('Defragmented disk map: ', defragmentedDiskMap);
-    return 0;
+    return this.calculateChecksum(diskMap);
   }
 
   partTwo(): number {
     return 1;
   }
 
-  defragmentationDiskMap(diskMapStr: string): string {
-    const diskMap = diskMapStr.split('');
+  defragmentationDiskMap(diskMap: DiskFile[]): void {
     for (let i = 0; i < diskMap.length; i++) {
-      if (diskMap[i] === '.') {
+      if (!diskMap[i].isFile) {
         for (let z = diskMap.length - 1; z > i; z--) {
-          if (diskMap[z] !== '.') {
+          if (diskMap[z].isFile) {
             diskMap[i] = diskMap[z];
-            diskMap[z] = '.';
+            diskMap[z] = new DiskFile(null, false);
             break;
           }
         }
       }
     }
-    return diskMap.join('');
   }
 
-  decryptDiskMap(encyptedDiskMap: string): string {
-    let diskMap = '';
+  decryptDiskMap(encryptedDiskMap: string): DiskFile[] {
+    const diskMap: DiskFile[] = [];
     let diskId = 0;
-    for (let i = 0; i < encyptedDiskMap.length; i++) {
+    for (let i = 0; i < encryptedDiskMap.length; i++) {
       if (i % 2 === 0) {
-        diskMap = this.concatNSymbols(
-          diskMap,
-          diskId.toString(),
-          Number.parseInt(encyptedDiskMap[i]),
-        );
+        // Длина файла
+        this.addDiskIds(diskMap, diskId, Number.parseInt(encryptedDiskMap[i]));
         diskId++;
       } else {
-        diskMap = this.concatNSymbols(
-          diskMap,
-          '.',
-          Number.parseInt(encyptedDiskMap[i]),
-        );
+        // Длина свободного места
+        this.addDiskIds(diskMap, null, Number.parseInt(encryptedDiskMap[i]));
       }
     }
     return diskMap;
   }
 
-  concatNSymbols(input: string, symbol: string, count: number): string {
-    let result = input;
-    for (let i = 0; i < count; i++) {
-      result += symbol;
+  calculateChecksum(diskMap: DiskFile[]): number {
+    let checksum = 0;
+
+    for (let i = 0; i < diskMap.length; i++) {
+      if (diskMap[i].isFile) {
+        const id = diskMap[i].id! * i;
+        checksum = checksum + id;
+      } else {
+        continue;
+      }
     }
-    return result;
+    console.log('CheckSum is ', checksum);
+    return checksum;
+  }
+
+  addDiskIds(diskMap: DiskFile[], diskId: number | null, count: number): void {
+    for (let i = 0; i < count; i++) {
+      if (diskId === null) {
+        diskMap.push(new DiskFile(null, false));
+      } else {
+        diskMap.push(new DiskFile(diskId, true));
+      }
+    }
   }
 }
