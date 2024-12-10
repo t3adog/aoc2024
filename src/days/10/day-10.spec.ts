@@ -14,7 +14,7 @@ describe('day 10', () => {
     const day10 = new Day10(
       fs.readFileSync('./src/days/10/inputs/test.txt', 'utf8'),
     );
-    expect(day10.partOne()).toEqual(81);
+    expect(day10.partOne()).toEqual(36);
   });
 
   it('should solve part02', () => {
