@@ -55,7 +55,7 @@ export class Day09 extends AbstractDay {
         const id = diskMap[i].id! * i;
         checksum = checksum + id;
       } else {
-        continue;
+        break;
       }
     }
     console.log('CheckSum is ', checksum);
