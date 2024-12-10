@@ -14,14 +14,14 @@ describe('day 10', () => {
     const day10 = new Day10(
       fs.readFileSync('./src/days/10/inputs/test.txt', 'utf8'),
     );
-    expect(day10.partOne()).toEqual(36);
+    expect(day10.partOne()).toEqual(81);
   });
 
   it('should solve part02', () => {
     const day10 = new Day10(
       fs.readFileSync('./src/days/10/inputs/test.txt', 'utf8'),
     );
-    expect(day10.partTwo()).toEqual(1);
+    expect(day10.partTwo()).toEqual(81);
   });
 });
 

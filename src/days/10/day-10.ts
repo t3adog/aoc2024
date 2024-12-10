@@ -25,6 +25,19 @@ export class Day10 extends AbstractDay {
     return result;
   }
 
+  partTwo(): number {
+    const starts = this.parseAllStarts(this.map);
+
+    const trails: Trail[] = [];
+
+    for (const start of starts) {
+      trails.push(...this.findAllTrails(this.map, [start]));
+    }
+    const result = this.countTrailsRatings(trails);
+
+    return result;
+  }
+
   countCorrectTrails(trails: Trail[]): number {
     const trailMap: Map<string, Set<string>> = new Map<string, Set<string>>();
     for (const trail of trails) {
@@ -49,8 +62,32 @@ export class Day10 extends AbstractDay {
     return count;
   }
 
-  partTwo(): number {
-    return 1;
+  countTrailsRatings(trails: Trail[]): number {
+    const trailMap: Map<string, Set<string>> = new Map<string, Set<string>>();
+    for (const trail of trails) {
+      const startKey = trail.path[0].toString();
+      if (
+        trail.path.length === 10 &&
+        trail.path[0].value === 0 &&
+        trail.path[trail.path.length - 1].value === 9
+      ) {
+        if (!trailMap.has(startKey)) {
+          trailMap.set(startKey, new Set<string>());
+        }
+        trailMap.set(
+          startKey,
+          trailMap
+            .get(startKey)!
+            .add(trail.path.map((p) => p.toString()).join('')),
+        );
+      }
+    }
+
+    let count = 0;
+    for (const key of trailMap.keys()) {
+      count += trailMap.get(key)!.size;
+    }
+    return count;
   }
 
   parseAllStarts(map: string[][]): Trail[] {
