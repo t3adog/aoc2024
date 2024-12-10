@@ -10,15 +10,12 @@ export class Day09 extends AbstractDay {
   partOne(): number {
     const diskMap = this.decryptDiskMap(this.input);
     this.fragmentationDiskMap(diskMap);
-
     return this.calculateChecksum(diskMap);
   }
 
   partTwo(): number {
     const chunks = this.decryptDiskMapToChunks(this.input);
     this.defragmentationDiskMap(chunks);
-
-    // to high 15940651423142
     return this.calculateChecksum(this.convertChunksToDiskMap(chunks));
   }
 
