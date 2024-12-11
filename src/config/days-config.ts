@@ -9,6 +9,7 @@ import { Day07 } from '../days/07/day-07';
 import { Day08 } from '../days/08/day-08';
 import { Day09 } from '../days/09/day-09';
 import { Day10 } from '../days/10/day-10';
+import { Day11 } from '../days/11/day-11';
 import { AbstractDay } from '../days/base/abstract-day';
 
 export const daysConfig: Map<string, AbstractDay> = new Map();
@@ -51,4 +52,8 @@ daysConfig.set(
 daysConfig.set(
   'day10',
   new Day10(fs.readFileSync('./src/days/10/inputs/prod.txt', 'utf8')),
+);
+daysConfig.set(
+  'day11',
+  new Day11(fs.readFileSync('./src/days/11/inputs/prod.txt', 'utf8')),
 );
