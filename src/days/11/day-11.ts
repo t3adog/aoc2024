@@ -23,7 +23,7 @@ export class Day11 extends AbstractDay {
     }, 0);
   }
 
-  blink(stone: number, amount: number, cache: Map<string, number>) {
+  blink(stone: number, amount: number, cache: Map<string, number>): number {
     const stoneKey = `${stone}-${amount}`;
     if (cache.has(stoneKey)) {
       return cache.get(stoneKey)!;
