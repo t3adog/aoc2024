@@ -7,39 +7,49 @@ export class Day11 extends AbstractDay {
   }
 
   partOne(): number {
-    let stones = this.input.split(' ');
-    stones = this.blinkNTimes(stones, 25);
-    return stones.length;
+    const stones = this.input.split(' ').map(Number);
+    return this.calcBlinks(stones, 25);
   }
 
   partTwo(): number {
-    return 1;
+    const stones = this.input.split(' ').map(Number);
+    return this.calcBlinks(stones, 75);
   }
 
-  blinkNTimes(stones: string[], n: number): string[] {
-    for (let i = 0; i < n; i++) {
-      //console.log(`Stones before: ${stones.join(' ')}`);
-      stones = this.blink(stones);
-      //console.log(`Stones after: ${stones.join(' ')}`);
+  calcBlinks(stones: number[], amount: number): number {
+    const cache = new Map<string, number>();
+    return stones.reduce((sum, stone) => {
+      return sum + this.blink(stone, amount, cache);
+    }, 0);
+  }
+
+  blink(stone: number, amount: number, cache: Map<string, number>) {
+    const stoneKey = `${stone}-${amount}`;
+    if (cache.has(stoneKey)) {
+      return cache.get(stoneKey)!;
     }
-    return stones;
-  }
 
-  blink(stones: string[]): string[] {
-    const newStones: string[] = [];
-    for (let i = 0; i < stones.length; i++) {
-      const stone = stones[i];
-      if (stone === '0') {
-        newStones.push('1');
-      } else if (stone.length % 2 === 0) {
-        newStones.push(stone.substring(0, stone.length / 2));
-        newStones.push(
-          Number.parseInt(stone.substring(stone.length / 2)).toString(),
-        );
+    let result: number;
+
+    if (amount === 0) {
+      return 1;
+    } else if (stone === 0) {
+      result = this.blink(1, amount - 1, cache);
+    } else {
+      const stoneStr = stone.toString();
+      if (stoneStr.length % 2 === 0) {
+        const mid = stoneStr.length >> 1;
+        const left = +stoneStr.substring(0, mid);
+        const right = +stoneStr.substring(mid);
+        result =
+          this.blink(left, amount - 1, cache) +
+          this.blink(right, amount - 1, cache);
       } else {
-        newStones.push((Number.parseInt(stone) * 2024).toString());
+        result = this.blink(stone * 2024, amount - 1, cache);
       }
     }
-    return newStones;
+
+    cache.set(stoneKey, result);
+    return result;
   }
 }
